@@ -131,5 +131,196 @@ Or:
 
 ---
 
+---
+
+### ✅ **Sample Queries and Outputs**
+
+#### **Bangla Query Example**
+
+**Input:**
+
+```
+অনুপমের ভাষায় সুপুরুষ কাকে বলা হয়েছে?
+```
+
+**Output:**
+
+```
+শস্তুনাথ
+```
+
+---
+
+#### **Another Bangla Query**
+
+**Input:**
+
+```
+কাকে অনুপমের ভাগ্য দেবতা বলে উল্লেখ করা হয়েছে?
+```
+
+**Output:**
+
+```
+মামাকে
+```
+
+---
+
+#### **English Query Example**
+
+**Input:**
+
+```
+Was his Anupam's marriage completed? 
+```
+
+**Output:**
+
+```
+Based on the information provided, it seems that Anupam's marriage was not completed.
+```
+
+---
+
+
+
+### ✅ **Evaluation Matrix**
+
+| **Query**                                       | **Expected Answer** | **Model Answer**              | **Grounded** | **Relevance (Cosine)** |
+| ----------------------------------------------- | ------------------- | ----------------------------- | ------------ | ---------------------- |
+| অনুপমের ভাষায় সুপুরুষ কাকে বলা হয়েছে?           | শস্তুনাথ            | (গ) সুপুরুষ বটে- কে? শস্তুনাথ | ✅            | 0.81                   |
+| কাকে অনুপমের ভাগ্য দেবতা বলে উল্লেখ করা হয়েছে? | মামাকে              | মামাকে                        | ✅            | 0.80                   |
+| বিয়ের সময় কল্যাণীর প্রকৃত বয়স কত ছিল?        | ১৫ বছর              | ১৬/১৭ বছর                     | ✅            | 0.82                   |
+
+---
+
+#### **Evaluation Summary**
+
+```
+Grounded Answers: 3/3
+Relevant Retrievals: 3/3
+```
+
+* **Groundedness:** All answers were present in the retrieved context.
+* **Relevance:** Average cosine similarity > 0.80, indicating highly relevant chunks.
+* **Accuracy Observation:** For the third query, the model answered approximately (16/17 years vs. 15 years), showing the model’s reasoning but not exact matching.
+
+---
+
+
+
+---
+
+## ✅ **API Documentation**
+
+### **Overview**
+
+This API provides a REST interface for querying the RAG system
+
+---
+
+### **Base URL**
+
+```
+https://<your-ngrok-id>.ngrok-free.app
+```
+
+---
+
+### **Endpoint**
+
+```
+POST /ask
+```
+
+---
+
+### **Request Details**
+
+* **Method:** `POST`
+* **Headers:**
+
+  ```
+  Content-Type: application/json
+  ```
+* **Request Body Example:**
+
+```json
+{
+  "query": "কাকে অনুপমের ভাগ্য দেবতা বলে উল্লেখ করা হয়েছে?"
+}
+```
+
+---
+
+### **Response Details**
+
+* **Format:** `application/json`
+* **Example Response:**
+
+```json
+{
+  "question": "কাকে অনুপমের ভাগ্য দেবতা বলে উল্লেখ করা হয়েছে?",
+  "answer": "মামাকে"
+}
+```
+
+---
+
+### **How to Test the API**
+
+#### ✅ **1. Swagger UI**
+
+* Visit:
+
+```
+https://<your-ngrok-id>.ngrok-free.app/docs
+```
+
+* Click **POST /ask → Try it out → Enter query → Execute**
+* View the response in JSON format.
+
+---
+
+#### ✅ **2. Curl Command**
+
+```bash
+curl -X 'POST' \
+  'https://<your-ngrok-id>.ngrok-free.app/ask' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "query": "Who is referred to as the good man in Anupomer language?"
+}'
+```
+
+---
+
+### **Authentication**
+
+Ngrok requires authentication for generating a public link:
+
+1. Sign up at [ngrok dashboard](https://dashboard.ngrok.com/signup).
+2. Copy your **Authtoken** from:
+
+```
+https://dashboard.ngrok.com/get-started/your-authtoken
+```
+
+3. Add in Colab:
+
+```bash
+!ngrok config add-authtoken YOUR_AUTHTOKEN
+```
+
+---
+
+### **Screenshot API**
+<img width="668" height="386" alt="api_UI_screenshot" src="https://github.com/user-attachments/assets/4a2bff16-ed32-4ed0-913a-1cf8a64d73a1" />
+
+
+
+
 
 
