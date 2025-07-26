@@ -316,7 +316,7 @@ https://dashboard.ngrok.com/get-started/your-authtoken
 
 ---
 
-### **Screenshot API**
+### **Screenshot API UI**
 <img width="668" height="386" alt="api_UI_screenshot" src="https://github.com/user-attachments/assets/4a2bff16-ed32-4ed0-913a-1cf8a64d73a1" />
 
 
