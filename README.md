@@ -321,6 +321,54 @@ https://dashboard.ngrok.com/get-started/your-authtoken
 
 
 
+---
+
+### ✅ **Assignment Questions and Answers (Paragraph Style)**
+
+---
+
+### **1. What method or library did you use to extract the text, and why? Did you face any formatting challenges with the PDF content?**
+
+To extract text from the Bangla PDF, we used **Tesseract OCR** via the `pytesseract` library along with `pdf2image`. The reason for this approach was that Bangla text breaks into disjoint characters or has incorrect ligatures (For example: 'নািীযকামলঠিক, র্কন্তুদুব্িলন - কলযাণীিিীব্নচর্িতদ্বািাপ্রর্তজিতএইসতযঅনুধাব্নকিকত পািকব্।') when extracted using common parsers like PyMuPDF or PDFMiner. With OCR, the text was recognized directly from rendered images, preserving the language structure better. 
+
+---
+
+### **2. What chunking strategy did you choose (e.g., paragraph-based, sentence-based, character limit)? Why do you think it works well for semantic retrieval?**
+
+We adopted a **character-based chunking strategy**, where each chunk was set to 1,700 characters with an overlap of 300 characters. This approach was necessary because OCR output lacks reliable paragraph boundaries, making paragraph-based or sentence-based chunking less accurate. The overlapping strategy ensured that if a question referred to content spanning two chunks, it would still appear in the retrieved context. This method works well for semantic retrieval because it provides a balanced chunk size not too large to lose focus and not too small to lose context.
+
+---
+
+### **3. What embedding model did you use? Why did you choose it? How does it capture the meaning of the text?**
+
+We used the **intfloat/multilingual-e5-base** model for generating text embeddings. This model was chosen because it supports both Bangla and English, which was essential for handling multilingual queries. It is specifically optimized for retrieval tasks, meaning that semantically similar texts, even in different languages, are embedded close to each other in the vector space. This allows for meaningful comparison between user queries and document chunks, regardless of language differences.
+
+---
+
+### **4. How are you comparing the query with your stored chunks? Why did you choose this similarity method and storage setup?**
+
+We stored all embeddings in a **FAISS index (IndexFlatL2)** and used **L2 distance** for similarity search. This method was selected because Faiss is a library for efficient similarity search and clustering of dense vectors from facebook. When embeddings are normalized, L2 distance effectively behaves like cosine similarity, which is widely used for semantic retrieval. This setup ensures that queries are compared with the most relevant document chunks based on semantic similarity, not just keyword overlap.
+
+---
+
+### **5. How do you ensure that the question and the document chunks are compared meaningfully? What would happen if the query is vague or missing context?**
+
+We ensured meaningful comparison by using a multilingual embedding model and introducing overlapping chunks so that relevant context is not lost at chunk boundaries. Additionally, the retrieval step uses semantic similarity instead of keyword matching, allowing queries and chunks with similar meaning to align, even if their wording differs. If the query is vague or lacks sufficient context, the system may retrieve less relevant chunks or fail to find the correct answer. In such cases, our model is instructed to respond with a fallback message—“প্রদত্ত তথ্য থেকে উত্তর পাওয়া যায়নি” in Bangla or “Answer not found in context” in English. 
+
+---
+
+### **6. Do the results seem relevant? If not, what might improve them (e.g., better chunking, better embedding model, larger document)?**
+
+The results were generally relevant and close to correct, but not always perfectly accurate or structured as a human might expect, as shown in our evaluation where all answers were grounded in the retrieved context and had an average cosine similarity of around 0.81. However, there were slight discrepancies in numeric details for example, the model answered “16/17 years” instead of “15 years,” which indicates approximate reasoning. 
+To improve the results, the following steps can be taken:
+
+* **Use higher-parameter models:** Larger models like LLaMA-3 or Gemma would offer better reasoning and accuracy, provided sufficient GPU resources are available.
+* **Fine-tune models on similar datasets:** Training on Bangla-language QA datasets would allow the model to better understand context, idioms, and cultural nuances.
+* **Experiment with chunking and retrieval parameters:** Adjusting chunk size, overlap, and number of retrieved chunks can help preserve more context and improve semantic retrieval accuracy.
+* **Introduce re-ranking or hybrid retrieval:** Combining semantic search with keyword-based retrieval and applying re-ranking could further increase relevance.
+
+---
+
 
 
 
